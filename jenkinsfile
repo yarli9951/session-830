@@ -1,0 +1,46 @@
+pipeline {
+    
+    triggers{ cron('H/1 * * * *') }
+    agent any
+     parameters { string(name: 'Version' ,  defaultValue: 'staging',  description: 'To pass App Version') }
+       environment { 
+                     value = 'sample'
+      }
+    options {
+
+        buildDiscarder(logRotator(numToKeepStr: '3'))
+    }   
+    
+    stages{
+        stage('checkout'){
+            steps{
+                script{
+                    git 'https://github.com/yarli9951/session-830.git'
+                    echo "this a $value"
+                    echo "this is version $Version"
+                }
+                script{
+                    echo "this is second script"
+                }
+            }
+
+
+        }
+       stage('Build'){
+          steps{
+	  script{
+
+	  	cd demo 
+		mvn clean 
+	  }
+
+
+
+
+		}
+	}
+
+
+
+    }
+}
